@@ -5,10 +5,6 @@ A multi-tenant club management platform. The immediate customer is a
 15-year-old beer tasting club in Cincinnati called "Book Club" (long story).
 The platform is built to serve any tasting/rating club type.
 
-## Read this first
-Full PRD is in docs/BookClub_App_PRD_v1.0.docx — read it before starting 
-any significant feature work.
-
 ## Author
 Matt Thomson
 
@@ -36,7 +32,7 @@ Phase 1 — Foundation. Goal: working deployed app the Beer Club
 can use for a real meeting.
 
 ## Phase 1 priorities in order
-1. React + Vite project scaffold
+1. React + Vite project scaffold ✓
 2. Supabase project connected
 3. Auth (magic link + password)
 4. Club creation and invite flow
