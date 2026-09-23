@@ -1,0 +1,29 @@
+# This workflow runs every 3 days to prevent the Supabase free-tier project
+# from auto-pausing due to inactivity. It just makes a small HTTP request to
+# the database health endpoint — that's enough to count as "activity."
+
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Runs at 12:00 UTC every 3 days (Mon, Thu, Sun, etc.)
+    # Cron format: minute hour day-of-month month day-of-week
+    - cron: '0 12 */3 * *'
+  # Also lets you trigger it manually from the GitHub Actions tab if needed
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase health endpoint
+        # We send a GET request to the Supabase REST API root.
+        # The Authorization header uses the anon key stored as a GitHub secret.
+        # A 200 response means the project is awake and active.
+        run: |
+          echo "Pinging Supabase to prevent inactivity pause..."
+          curl --fail --silent --show-error \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+          echo "Ping successful — Supabase project is active."
