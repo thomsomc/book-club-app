@@ -17,13 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Supabase health endpoint
-        # We send a GET request to the Supabase REST API root.
-        # The Authorization header uses the anon key stored as a GitHub secret.
-        # A 200 response means the project is awake and active.
+        # Hit the auth health endpoint — it returns 200 with no auth required,
+        # which is all we need to prove the project is awake and not paused.
         run: |
           echo "Pinging Supabase to prevent inactivity pause..."
-          curl --fail --silent --show-error \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
-          echo "Ping successful — Supabase project is active."
+          HTTP_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/auth/v1/health")
+          echo "Response status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+            echo "Ping successful — Supabase project is active."
+          else
+            echo "Unexpected status $HTTP_STATUS — project may be unhealthy."
+            exit 1
+          fi
