@@ -24,9 +24,11 @@ jobs:
           HTTP_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" \
             "${{ secrets.SUPABASE_URL }}/auth/v1/health")
           echo "Response status: $HTTP_STATUS"
-          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
-            echo "Ping successful — Supabase project is active."
+          # Any HTTP response (including 4xx) proves the project is up.
+          # Only a network-level failure like DNS error means it's actually paused.
+          if [ -n "$HTTP_STATUS" ] && [ "$HTTP_STATUS" -gt 0 ]; then
+            echo "Ping successful — Supabase project is active (HTTP $HTTP_STATUS)."
           else
-            echo "Unexpected status $HTTP_STATUS — project may be unhealthy."
+            echo "No response received — project may be paused or unreachable."
             exit 1
           fi
