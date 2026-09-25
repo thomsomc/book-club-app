@@ -253,7 +253,12 @@ export default function MeetingSettings({ meeting, clubSettings = {}, members, m
             onChange={e => update('tiebreak_rule', e.target.value || null)}
             className="shrink-0 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500 text-xs"
           >
-            <option value="">Club default</option>
+            {/* Show the club's current tiebreak rule in parens so the user knows what they're inheriting */}
+            <option value="">Club default ({
+              clubSettings.tiebreak_rule === 'self_vote'    ? 'self-score' :
+              clubSettings.tiebreak_rule === 'host_decides' ? 'host decides' :
+              'no tiebreaker'
+            })</option>
             <option value="none">No tiebreaker — all tied share the win</option>
             <option value="self_vote">Include contributor's self-score</option>
             <option value="host_decides">Host decides</option>
