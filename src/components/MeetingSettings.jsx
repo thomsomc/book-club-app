@@ -4,11 +4,17 @@ import { supabase } from '../lib/supabase'
 // ── TriToggle ─────────────────────────────────────────────────────────────────
 // Three-way button group: "Default" (null) | "On" (true) | "Off" (false).
 // Used to override club-level boolean settings on a per-meeting basis.
-function TriToggle({ label, description, value, onChange }) {
+// Pass clubDefault (boolean) to show e.g. "Default (Off)" on the first button.
+function TriToggle({ label, description, value, onChange, clubDefault }) {
+  // Build the Default label — show the club's current value in parens if known
+  const defaultLabel = clubDefault === true  ? 'Default (On)'
+                     : clubDefault === false ? 'Default (Off)'
+                     : 'Default'
+
   const options = [
-    { val: null,  label: 'Default' },
-    { val: true,  label: 'On'      },
-    { val: false, label: 'Off'     },
+    { val: null,  label: defaultLabel },
+    { val: true,  label: 'On'         },
+    { val: false, label: 'Off'        },
   ]
   return (
     <div className="flex items-start justify-between gap-4">
@@ -40,12 +46,13 @@ function TriToggle({ label, description, value, onChange }) {
 // Inline settings panel rendered in MeetingView when the ⚙ button is tapped.
 // Props:
 //   meeting        – the full meeting row
+//   clubSettings   – the club's settings object (used to show defaults in TriToggles)
 //   members        – active club memberships [{ id, users: { display_name } }]
 //   myMembership   – caller's membership row
 //   isOwnerOrAdmin – boolean
 //   onSaved(updated) – called with the fresh meeting row after a successful save
 //   onClose()        – called when the panel should be dismissed
-export default function MeetingSettings({ meeting, members, myMembership, isOwnerOrAdmin, onSaved, onClose }) {
+export default function MeetingSettings({ meeting, clubSettings = {}, members, myMembership, isOwnerOrAdmin, onSaved, onClose }) {
   // Flatten current meeting state into the form, including per-meeting settings
   // stored in meetings.metadata.settings.
   const existingSettings = meeting.metadata?.settings ?? {}
@@ -225,6 +232,7 @@ export default function MeetingSettings({ meeting, members, myMembership, isOwne
           description="Hide running scores until the meeting ends."
           value={form.blind_voting}
           onChange={v => update('blind_voting', v)}
+          clubDefault={clubSettings.blind_voting ?? false}
         />
 
         <TriToggle
@@ -232,6 +240,7 @@ export default function MeetingSettings({ meeting, members, myMembership, isOwne
           description="Show composite scores only — not each person's individual vote."
           value={form.hide_scores_after_meeting}
           onChange={v => update('hide_scores_after_meeting', v)}
+          clubDefault={clubSettings.hide_scores_after_meeting ?? false}
         />
 
         <div className="flex items-start justify-between gap-4">

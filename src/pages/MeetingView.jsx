@@ -408,6 +408,7 @@ export default function MeetingView({ session, displayName, onBack }) {
         {showSettings && canManageMeeting && (
           <MeetingSettings
             meeting={meeting}
+            clubSettings={clubSettings}
             members={members}
             myMembership={myMembership}
             isOwnerOrAdmin={isOwnerOrAdmin}
