@@ -2,7 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- SVG scales to any size — modern browsers prefer this -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- ICO is the universal fallback for older browsers and Windows taskbar pinning -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Explicit PNG sizes for browsers that want them -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <!-- iOS "Add to Home Screen" icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <!-- Android home screen / PWA — references icon-192.png and icon-512.png -->
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book Club Cincy</title>
     <meta name="description" content="Book Club Cincinnati — track ratings, scores, and history for every meeting." />
