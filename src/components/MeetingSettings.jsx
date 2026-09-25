@@ -276,7 +276,12 @@ export default function MeetingSettings({ meeting, clubSettings = {}, members, m
             onChange={e => update('prereg_visibility', e.target.value || null)}
             className="shrink-0 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500 text-xs"
           >
-            <option value="">Club default</option>
+            <option value="">Club default ({
+              clubSettings.prereg_visibility === 'attendees_only' ? 'attendees only' :
+              clubSettings.prereg_visibility === 'count_only'     ? 'count only' :
+              clubSettings.prereg_visibility === 'hidden'         ? 'hidden' :
+              'full list'
+            })</option>
             <option value="full">Full list</option>
             <option value="attendees_only">Attendees only</option>
             <option value="count_only">Count only</option>
