@@ -43,7 +43,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">
       <div className="w-full max-w-md p-8 bg-gray-900 rounded-xl">
-        <h1 className="text-2xl font-bold text-white mb-6 text-center">Book Club</h1>
+        <h1 className="text-2xl font-bold text-white mb-6 text-center">Book Club Cincy</h1>
 
         <div className="flex gap-2 mb-6">
           {['magic', 'password', 'signup'].map((m) => (
